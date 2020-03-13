@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
+    <Folder Include="Enums\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Models\PropertyModel.cs" />
+    <Compile Remove="Models\FieldModel.cs" />
+    <Compile Remove="Class1.cs" />
+  </ItemGroup>
+</Project>
