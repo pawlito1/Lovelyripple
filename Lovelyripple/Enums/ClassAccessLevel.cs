@@ -3,6 +3,7 @@
     public enum ClassAccessLevel
     {
         Public,
-        Private
+        Private,
+        PublicStatic
     }
 }

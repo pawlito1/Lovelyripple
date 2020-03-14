@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using Lovelyripple.Enums;
 
@@ -13,6 +14,7 @@ namespace Lovelyripple.Models
             public string TypeName;
             public bool RequireInitialization;
             public ValueModel Value;
+            public List<ValueModel> Values;
             public PropertyScope Scope;
 
             public PropertyModel(string propertyName, string typeName, bool requireInit = true, ValueModel valueModel = null, PropertyScope propertyScope = PropertyScope.Get)
@@ -26,7 +28,7 @@ namespace Lovelyripple.Models
                 if (valueModel != null)
                 {
                     if (valueModel.TypeName != TypeName)
-                        throw new ArgumentException("Value type does not match with property type name.");
+                        throw new ArgumentException("Value type does not match with property type.");
                 }
                 Value = valueModel;
                 RequireInitialization = requireInit;
@@ -35,6 +37,17 @@ namespace Lovelyripple.Models
 
             public PropertyModel(string propertyName, Type type, bool requireInit = true, ValueModel valueModel = null, PropertyScope propertyScope = PropertyScope.Get)
                 : this(propertyName, type?.FullName, requireInit, valueModel, propertyScope)
+            { }
+            public PropertyModel(string propertyName, string typeName, List<ValueModel> valueModels,PropertyScope propertyScope = PropertyScope.GetSet)
+                : this(propertyName,typeName,true,null,propertyScope)
+            {
+                Values = valueModels == null || !valueModels.Any() ?
+                    new List<ValueModel>()
+                    : valueModels;
+                RequireInitialization = true;
+            }
+            public PropertyModel(string propertyName, Type type, List<ValueModel> valueModels, PropertyScope propertyScope = PropertyScope.GetSet)
+                : this(propertyName, type?.FullName,valueModels,propertyScope)
             { }
         }
     }
