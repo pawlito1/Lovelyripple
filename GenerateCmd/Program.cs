@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.IO;
 using Newtonsoft.Json;
 using Lovelyripple.Models;
 using Lovelyripple.Enums;
@@ -13,6 +14,7 @@ namespace GenerateCmd
     {
         static void Main(string[] args)
         {
+            Console.ForegroundColor = ConsoleColor.White;
             var properties = new List<ClassModel.PropertyModel>();
             var firstNameValue = new ValueModel(typeof(string), "Tomasz");
             var numOfPpl = new ValueModel(typeof(int), 123);
@@ -44,10 +46,17 @@ namespace GenerateCmd
 
             models.Add(assetInfoModel);
             models.Add(classModel);
+
+            CodeGenerator.LogMessage = LogMsg;
+            //CodeGenerator.SaveTo = new System.IO.FileInfo(Path.Combine(Directory.GetCurrentDirectory(),"test.cs"));
             CodeGenerator.CreateSourceCode(models);
             Console.WriteLine();
             Console.WriteLine("--------------------");
             Console.WriteLine("ready");
+        }
+        static void LogMsg(string msg)
+        {
+            Console.WriteLine(msg);
         }
     }
 }

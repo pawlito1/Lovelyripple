@@ -12,8 +12,10 @@ namespace Lovelyripple.Generators
     /// </summary>
     public static class CodeGenerator
     {
-        public static bool SaveToFile = false;
+        public static FileInfo SaveTo = null;
         static StringBuilder _sb = new StringBuilder();
+        public static LogOutput LogMessage = DefaultLogMessage;
+        public delegate void LogOutput(string msg);
 
         public static void CreateSourceCode(IEnumerable<ClassModel> classModels)
         {
@@ -31,13 +33,29 @@ namespace Lovelyripple.Generators
                 CloseBrace(_sb);
                 CloseBrace(_sb);
             }
-            if (SaveToFile)
-                File.WriteAllText("", _sb.ToString());
-
-            Console.WriteLine(_sb);
+            if (SaveTo != null)
+            {
+                if (!SaveTo.Directory.Exists)
+                    SaveTo.Directory.Create();
+                try
+                {
+                    File.WriteAllText(SaveTo.FullName, _sb.ToString());
+                }
+                catch (Exception ex)
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    LogMessage(ex.Message);
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+            }
+            LogMessage(_sb.ToString());
         }
 
         // ----- PRIVATES -----
+        static void DefaultLogMessage(string msg)
+        {
+            Console.WriteLine(msg);
+        }
         static void AddNamespace(ClassModel classModel,StringBuilder sb)
         {
             sb.AppendLine($"namespace {classModel.Namespace}");
@@ -154,7 +172,7 @@ namespace Lovelyripple.Generators
             sb.AppendLine($"using System.Linq;");
             sb.AppendLine($"using System.Text;");
             sb.AppendLine($"using System.IO;");
-            sb.AppendLine($"using Newtonfsoft.Json;");
+            sb.AppendLine($"using Newtonsoft.Json;");
         }
     }
 }
