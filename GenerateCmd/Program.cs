@@ -7,6 +7,7 @@ using Lovelyripple.Models;
 using Lovelyripple.Enums;
 using Lovelyripple.Generators;
 using Norian.Configuration.Base;
+using OfficeOpenXml;
 
 namespace GenerateCmd
 {
@@ -14,6 +15,9 @@ namespace GenerateCmd
     {
         static void Main(string[] args)
         {
+            var pckg = new PackageGenerator();
+            pckg.DirectorySet.WorkingDirectory = "";
+            pckg.Id = "Lovelyripple.Demo";
             Console.ForegroundColor = ConsoleColor.White;
             var properties = new List<ClassModel.PropertyModel>();
             var firstNameValue = new ValueModel(typeof(string), "Tomasz");
@@ -49,7 +53,8 @@ namespace GenerateCmd
 
             CodeGenerator.LogMessage = LogMsg;
             //CodeGenerator.SaveTo = new System.IO.FileInfo(Path.Combine(Directory.GetCurrentDirectory(),"test.cs"));
-            CodeGenerator.CreateSourceCode(models);
+            pckg.ClassModels.AddRange(models);
+            pckg.Build();
             Console.WriteLine();
             Console.WriteLine("--------------------");
             Console.WriteLine("ready");

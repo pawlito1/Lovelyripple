@@ -4,6 +4,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.IO;
 using Lovelyripple.Models;
+using Lovelyripple.Enums;
 
 namespace Lovelyripple.Generators
 {
@@ -79,7 +80,7 @@ namespace Lovelyripple.Generators
         }
         static void AddProperties(ClassModel classModel, StringBuilder sb)
         {
-            var accessLevel = "";
+            string accessLevel;
             switch (classModel.AccessLevel)
             {
                 case Enums.ClassAccessLevel.PublicStatic:
@@ -108,6 +109,12 @@ namespace Lovelyripple.Generators
         }
         static void AddBaseConstructor(ClassModel classModel, StringBuilder sb)
         {
+            if (classModel.Name.IndexOf('<') > 0) //class is generic so contructors can not have '<>'
+                classModel.Name = classModel.Name.Substring(0, classModel.Name.IndexOf('<'));
+
+            if (classModel.Properties.All(p => p.Scope == Enums.PropertyScope.Get))
+                return;
+
             sb.AppendLine($"{classModel.AccessLevel.ToString().ToLower()} {classModel.Name}()");
             OpenBrace(sb);
             //initialize properties that do not require initialization but have a ValueModel
@@ -121,9 +128,10 @@ namespace Lovelyripple.Generators
                 else
                     sb.AppendLine($"JsonConvert.DeserializeObject<{property.TypeName}>(\"{property.Value.Content}\");");
             }
+
             foreach (var property in classModel.Properties.Where(x => !x.RequireInitialization && x.Value != null && x.Scope == Enums.PropertyScope.Get))
             {
-                //populate private fields
+            //populate private fields
                 sb.Append($"this._{property.Name.ToLowerInvariant()} = ");
                 if (Type.GetType(property.TypeName) == typeof(string))
                     sb.AppendLine($"\"{property.Value.Content}\";");

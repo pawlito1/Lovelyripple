@@ -38,6 +38,13 @@ namespace Lovelyripple.Models
             public PropertyModel(string propertyName, Type type, bool requireInit = true, ValueModel valueModel = null, PropertyScope propertyScope = PropertyScope.Get)
                 : this(propertyName, type?.FullName, requireInit, valueModel, propertyScope)
             { }
+            /// <summary>
+            /// Constructor for properties that requires initialization
+            /// </summary>
+            /// <param name="propertyName">Name of a property</param>
+            /// <param name="typeName">Full name of a propoerty type</param>
+            /// <param name="valueModels">Initialization values for property, oreder matters!</param>
+            /// <param name="propertyScope">What is the propoerty scope access level</param>
             public PropertyModel(string propertyName, string typeName, List<ValueModel> valueModels,PropertyScope propertyScope = PropertyScope.GetSet)
                 : this(propertyName,typeName,true,null,propertyScope)
             {

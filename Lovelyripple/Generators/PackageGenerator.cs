@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Lovelyripple.Models;
+using NuGet;
 
 namespace Lovelyripple.Generators
 {
@@ -30,12 +31,12 @@ namespace Lovelyripple.Generators
         {
             _guid = System.Guid.NewGuid().ToString();
             ClassModels = new List<ClassModel>();
+            DirectorySet = new DirectorySetGenerator();
         }
         public void Build()
         {
             CodeGenerator.SaveTo = new System.IO.FileInfo(Path.Combine(DirectorySet.WorkingDirectory,Id+".cs"));
-            CodeGenerator.CreateSourceCode(ClassModels);
-            
+            CodeGenerator.CreateSourceCode(this.ClassModels);
         }
 
         public static Version CreateFullVersionFromMajorMinor(int majorVersion, int minorVersion)

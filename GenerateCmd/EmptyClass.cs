@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Newtonsoft.Json;
-
-
 namespace Norian.Configuration.Base
 {
     [Serializable]
@@ -23,9 +21,6 @@ namespace Norian.Configuration.Base
         System.Boolean _isperrobot;
         public System.Int32 NumOfAssets { get => _numofassets; }
         System.Int32 _numofassets;
-        public AssetInformation()
-        {
-        }
         public AssetInformation(System.String group, System.String name, System.String valuetype, System.Boolean hassuffix, System.Boolean isperrobot, System.Int32 numofassets)
         {
             this._group = group;
